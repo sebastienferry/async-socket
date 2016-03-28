@@ -5,13 +5,13 @@
 // this stuff is worth it, you can buy me a beer in return.   Poul-Henning Kamp
 // ----------------------------------------------------------------------------
 
-using System;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace ZuperSocket.Core.IoCompletionPort
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public class AsyncEvent
     {
         public AsyncOperation Operation { get; private set; }

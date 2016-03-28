@@ -46,10 +46,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ZuperSocket.Core\ZuperSocket.Core.csproj">
+    <ProjectReference Include="..\AsyncSocket.Core\AsyncSocket.Core.csproj">
       <Project>{8363cb87-c3fe-44d4-b378-615b07d93e13}</Project>
       <Name>ZuperSocket.Core</Name>
     </ProjectReference>

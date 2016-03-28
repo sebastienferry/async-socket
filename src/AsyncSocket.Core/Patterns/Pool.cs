@@ -14,12 +14,16 @@ namespace ZuperSocket.Core.Patterns
     /// <summary>
     /// Pool to manage reusable instances.
     /// </summary>
+    /// <typeparam name="T">Type of the pool</typeparam>
     internal class Pool<T>
     {
+        /// <summary>
+        /// Internal stack used to pool the reusable instances.
+        /// </summary>
         private readonly ConcurrentStack<T> _pool;
 
         /// <summary>
-        /// Create a new pool.
+        /// Initializes a new instance of the <see cref="Pool{T}"/> class.
         /// </summary>
         public Pool()
         {
@@ -27,7 +31,7 @@ namespace ZuperSocket.Core.Patterns
         }
 
         /// <summary>
-        /// Current number of available item in the pool.
+        /// Gets the current number of available item in the pool.
         /// </summary>
         internal int Count
         {
@@ -37,7 +41,7 @@ namespace ZuperSocket.Core.Patterns
         /// <summary>
         /// Pop one available instance from the pool making it unavailable.
         /// </summary>
-        /// <returns>One availabe instance</returns>
+        /// <returns>One available instance</returns>
         internal T Pop()
         {
             T item = default(T);
@@ -51,6 +55,7 @@ namespace ZuperSocket.Core.Patterns
         /// Append an instance to the pool.
         /// The instance would be available for reuse. 
         /// </summary>
+        /// <param name="item">Object to add into the pool.</param>
         internal void Push(T item)
         {
             _pool.Push(item);
