@@ -40,15 +40,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IoCompletionPort\AsyncSocket.cs" />
-    <Compile Include="Awaitable\AwaitableAccept.cs" />
-    <Compile Include="Awaitable\AwaitableSaea.cs" />
     <Compile Include="IoCompletionPort\SaeaSharedBuffer.cs" />
     <Compile Include="Messaging\Patterns\Replier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Messaging\Patterns\Requester.cs" />
     <Compile Include="IoCompletionPort\AsyncEvent.cs" />
     <Compile Include="Patterns\Pool.cs" />
-    <Compile Include="Awaitable\SocketExtensions.cs" />
     <Compile Include="IoCompletionPort\UserToken.cs" />
   </ItemGroup>
   <ItemGroup />

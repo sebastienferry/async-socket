@@ -5,55 +5,37 @@
 // this stuff is worth it, you can buy me a beer in return.   Poul-Henning Kamp
 // ----------------------------------------------------------------------------
 
-using System;
-using System.Collections;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Runtime.Remoting.Channels;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading;
-
 namespace ZuperSocket.Core.Messaging.Patterns
 {
-    using System.Threading.Tasks;
+    using System;
+    using System.Collections.Concurrent;
+    using System.Diagnostics;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Text;
     using ZuperSocket.Core.IoCompletionPort;
 
+    /// <summary>
+    /// This class is used in the request response pattern. It handles the response side.
+    /// </summary>
     public class Replier
     {
-        private static IPAddress ParseAddressIntoIPAddress(string address)
-        {
-            IPAddress ipAddress;
-
-            if (!IPAddress.TryParse(address, out ipAddress))
-            {
-                throw new ArgumentException(address);
-            }
-
-            return ipAddress;
-        }
-
         /// <summary>
-        /// Start the reponder.
+        /// Start the replier.
         /// </summary>
         public void Start()
         {
             // Prepare IP address to bind to.
-            IPAddress ipAddress = ParseAddressIntoIPAddress("127.0.0.1");
+            IPAddress ipaddress = ParseAddressIntoIPAddress("127.0.0.1");
 
-            IPEndPoint ipEndPoint = new IPEndPoint(ipAddress, 5555);
+            IPEndPoint ipendpoint = new IPEndPoint(ipaddress, 5555);
 
             ConcurrentQueue<AsyncEvent> events = new ConcurrentQueue<AsyncEvent>();
 
             // Initialize a new socket.
-            using (Socket socket = new Socket(ipAddress.AddressFamily, SocketType.Stream,
-                ipAddress.AddressFamily == AddressFamily.InterNetworkV6 ? ProtocolType.IPv6 : ProtocolType.IP))
+            using (Socket socket = new Socket(ipaddress.AddressFamily, SocketType.Stream, ipaddress.AddressFamily == AddressFamily.InterNetworkV6 ? ProtocolType.IPv6 : ProtocolType.IP))
             {
-                socket.Bind(ipEndPoint);
+                socket.Bind(ipendpoint);
 
                 socket.Listen(100);
 
@@ -91,31 +73,22 @@ namespace ZuperSocket.Core.Messaging.Patterns
                 }
             }
         }
+
+        /// <summary>
+        /// Parse a string into an <see cref="IPAddress"/>.
+        /// </summary>
+        /// <param name="address">The address to parse.</param>
+        /// <returns>The IPAddress parsed</returns>
+        private static IPAddress ParseAddressIntoIPAddress(string address)
+        {
+            IPAddress ipaddress;
+
+            if (!IPAddress.TryParse(address, out ipaddress))
+            {
+                throw new ArgumentException(address);
+            }
+
+            return ipaddress;
+        }
     }
-
-        //public void AddReactor(IReactor<T> reactor)
-        //{
-        //    _reactors.Add(reactor);
-        //}
-        
-        //private void HandleReceive(T request)
-        //{
-        //    IReactor<T> last = null;
-            
-        //    foreach (IReactor<T> reactor in _reactors)
-        //    {
-        //        reactor.React(request);
-
-        //        last = reactor;
-        //    }
-
-        //    T response = last.GetOutput();
-
-        //    SendResponse(response);
-        //}
-
-        //public void SendResponse(T response)
-        //{
-            
-        //}
 }
