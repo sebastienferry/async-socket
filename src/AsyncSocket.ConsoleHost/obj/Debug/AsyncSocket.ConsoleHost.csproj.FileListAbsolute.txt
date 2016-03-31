@@ -1,8 +1,0 @@
-C:\Users\sferry\Github\async-socket\src\AsyncSocket.ConsoleHost\bin\Debug\ZuperSocket.ConsoleHost.exe.config
-C:\Users\sferry\Github\async-socket\src\AsyncSocket.ConsoleHost\bin\Debug\ZuperSocket.ConsoleHost.exe
-C:\Users\sferry\Github\async-socket\src\AsyncSocket.ConsoleHost\bin\Debug\ZuperSocket.ConsoleHost.pdb
-C:\Users\sferry\Github\async-socket\src\AsyncSocket.ConsoleHost\bin\Debug\ZuperSocket.Core.dll
-C:\Users\sferry\Github\async-socket\src\AsyncSocket.ConsoleHost\bin\Debug\ZuperSocket.Core.pdb
-C:\Users\sferry\Github\async-socket\src\AsyncSocket.ConsoleHost\obj\Debug\AsyncSocket.ConsoleHost.csprojResolveAssemblyReference.cache
-C:\Users\sferry\Github\async-socket\src\AsyncSocket.ConsoleHost\obj\Debug\ZuperSocket.ConsoleHost.exe
-C:\Users\sferry\Github\async-socket\src\AsyncSocket.ConsoleHost\obj\Debug\ZuperSocket.ConsoleHost.pdb

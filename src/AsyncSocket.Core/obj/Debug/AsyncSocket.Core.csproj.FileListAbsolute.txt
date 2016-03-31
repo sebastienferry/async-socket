@@ -1,5 +1,0 @@
-C:\Users\sferry\Github\async-socket\src\AsyncSocket.Core\bin\Debug\ZuperSocket.Core.dll
-C:\Users\sferry\Github\async-socket\src\AsyncSocket.Core\bin\Debug\ZuperSocket.Core.pdb
-C:\Users\sferry\Github\async-socket\src\AsyncSocket.Core\obj\Debug\AsyncSocket.Core.csprojResolveAssemblyReference.cache
-C:\Users\sferry\Github\async-socket\src\AsyncSocket.Core\obj\Debug\ZuperSocket.Core.dll
-C:\Users\sferry\Github\async-socket\src\AsyncSocket.Core\obj\Debug\ZuperSocket.Core.pdb

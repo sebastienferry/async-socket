@@ -5,15 +5,21 @@
 // this stuff is worth it, you can buy me a beer in return.   Poul-Henning Kamp
 // ----------------------------------------------------------------------------
 
-namespace ZuperSocket.ConsoleClient
+using System.Collections.Concurrent;
+using AsyncSocket.Core.IoCompletionPort;
+
+namespace AsyncSocket.ConsoleClient
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
+    using System.Net.Sockets;
     using System.Text;
+    using System.Threading;
     using System.Threading.Tasks;
-    using ZuperSocket.Core;
-    using ZuperSocket.Core.Messaging.Patterns;
+    using AsyncSocket.Core;
+    using AsyncSocket.Core.Messaging.Patterns;
 
     /// <summary>
     /// Client in a console.
@@ -23,11 +29,58 @@ namespace ZuperSocket.ConsoleClient
         /// <summary>
         /// Client console entry point.
         /// </summary>
-        static void Main()
+        public static void Main()
         {
-            Requester requester = new Requester();
+            IPAddress ipaddress = IPAddress.Parse("127.0.0.1");
+            
+            Requester requester = new Requester(ipaddress, 5555);
 
-            requester.Do();
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            int loopSize = 0;
+
+            using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP))
+            {
+                socket.Connect(new IPEndPoint(ipaddress, 5555));
+
+                var t = new ConcurrentQueue<AsyncEvent>();
+
+                AsyncSocketWrapper asyncSocket = AsyncSocketWrapper.Create(socket, t);
+
+                asyncSocket.Send(Encoding.UTF8.GetBytes("ping"));
+
+                //socket.Send(Encoding.UTF8.GetBytes("ping"));
+            }
+
+            Console.ReadLine();
+            
+
+            //AsyncSocket socket = AsyncSocket.Create()
+
+            //socket.Connect();
+
+
+            //requester.Start(async (evt) =>
+            //{
+            //    Console.WriteLine(evt.Operation.ToString());
+
+            //    if (evt.Operation == AsyncOperation.ConnectionAccepted ||
+            //        evt.Operation == AsyncOperation.DataReceived)
+            //    {
+            //        // Send some data to the connected peed.
+            //        evt.Peer.Send(Encoding.UTF8.GetBytes("ping"));
+
+            //        loopSize++;
+
+            //        if (loopSize >= 1 - 1)
+            //        {
+            //            cts.Cancel();
+            //        }
+            //    }
+
+            //    await Task.Yield();
+
+            //}, 1, cts.Token).Wait(cts.Token);
 
             Console.ReadLine();
         }

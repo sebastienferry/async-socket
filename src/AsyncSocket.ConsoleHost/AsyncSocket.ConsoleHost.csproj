@@ -7,8 +7,8 @@
     <ProjectGuid>{1BF841C8-9004-48C9-8097-C872F4AF8838}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ZuperSocket.ConsoleHost</RootNamespace>
-    <AssemblyName>ZuperSocket.ConsoleHost</AssemblyName>
+    <RootNamespace>AsyncSocket.ConsoleHost</RootNamespace>
+    <AssemblyName>AsyncSocket.ConsoleHost</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
