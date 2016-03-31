@@ -5,10 +5,9 @@
 // this stuff is worth it, you can buy me a beer in return.   Poul-Henning Kamp
 // ----------------------------------------------------------------------------
 
-namespace ZuperSocket.Core.IoCompletionPort
+namespace AsyncSocket.Core.IoCompletionPort
 {
     using System.Net.Sockets;
-    using ZuperSocket.Core;
 
     /// <summary>
     /// UserToken objects are used to hold application level data
@@ -24,9 +23,12 @@ namespace ZuperSocket.Core.IoCompletionPort
         /// This is done only one time when we create the SocketAsyncEventArgs pool. 
         /// </summary>
         /// <param name="heapBufferOffset">This is the offset in the shared heap buffer.</param>
-        public UserToken(int heapBufferOffset)
+        /// <param name="socket">The socket that host the completion delegate.</param>
+        public UserToken(int heapBufferOffset, AsyncSocketWrapper socket)
         {
             this.HeapBufferOffset = heapBufferOffset;
+
+            this.Socket = socket;
         }
         
         /// <summary>
@@ -37,6 +39,6 @@ namespace ZuperSocket.Core.IoCompletionPort
         /// <summary>
         /// Gets or sets the AsyncSocket wrapper associated to the .NET Socket that initiated the SocketAsyncEventArgs.
         /// </summary>
-        public AsyncSocket Socket { get; set; }
+        public AsyncSocketWrapper Socket { get; private set; }
     }
 }

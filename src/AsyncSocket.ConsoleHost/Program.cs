@@ -5,27 +5,27 @@
 // this stuff is worth it, you can buy me a beer in return.   Poul-Henning Kamp
 // ----------------------------------------------------------------------------
 
-namespace ZuperSocket.ConsoleHost
+namespace AsyncSocket.ConsoleHost
 {
     using System;
     using System.Diagnostics;
-    using ZuperSocket.Core.Messaging.Patterns;
+    using AsyncSocket.Core.Messaging.Patterns;
 
     /// <summary>
     /// Server console.
     /// </summary>
-    class Program
+    public class Program
     {
         /// <summary>
         /// Server entry point.
         /// </summary>
-        static void Main()
+        public static void Main()
         {
             Trace.Listeners.Add(new ConsoleTraceListener());
 
-            Replier replyer = new Replier();
+            Replier replier = new Replier();
 
-            replyer.Start();
+            replier.Start("tcp://127.0.0.1:5555");
             
             Console.ReadLine();
         }

@@ -9,7 +9,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Net.Sockets;
 
-namespace ZuperSocket.Core.Patterns
+namespace AsyncSocket.Core.Patterns
 {
     /// <summary>
     /// Pool to manage reusable instances.

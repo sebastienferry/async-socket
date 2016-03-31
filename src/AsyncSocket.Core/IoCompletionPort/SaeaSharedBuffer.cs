@@ -5,7 +5,7 @@
 // this stuff is worth it, you can buy me a beer in return.   Poul-Henning Kamp
 // ----------------------------------------------------------------------------
 
-namespace ZuperSocket.Core.IoCompletionPort
+namespace AsyncSocket.Core.IoCompletionPort
 {
     using System;
     using System.Collections.Concurrent;
@@ -16,7 +16,7 @@ namespace ZuperSocket.Core.IoCompletionPort
     /// Create a large buffer on the heap for all SocketAsyncEventArgs
     /// of a pool, avoiding memory heap fragmentation.
     /// </summary>
-    internal class SaeaSharedBuffer
+    internal class SaeaSharedBuffer : IDisposable
     {
         /// <summary>
         /// Large heap buffer that would be reused among multiple SocketAsyncEventArgs.
@@ -57,7 +57,7 @@ namespace ZuperSocket.Core.IoCompletionPort
         
         /// <summary>
         /// Assign a portion of this large buffer to a SocketAsyncEventArgs.
-        /// Each portion are equals in size.
+        /// Each portion are equal in size.
         /// </summary>
         /// <param name="saea">SocketAsyncEventArgs to set the buffer to.</param>
         public void AssignBuffer(SocketAsyncEventArgs saea)
@@ -74,13 +74,16 @@ namespace ZuperSocket.Core.IoCompletionPort
                         this.ChunkSizeInBytes * chunkId,
                         this.ChunkSizeInBytes);
 
-                    saea.UserToken = new UserToken(offset);
-
                     return;    
                 }
             }            
 
             throw new InvalidOperationException("No more space available in the heap buffer");
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }

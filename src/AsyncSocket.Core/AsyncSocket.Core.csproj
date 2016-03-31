@@ -7,8 +7,8 @@
     <ProjectGuid>{8363CB87-C3FE-44D4-B378-615B07D93E13}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ZuperSocket.Core</RootNamespace>
-    <AssemblyName>ZuperSocket.Core</AssemblyName>
+    <RootNamespace>AsyncSocket.Core</RootNamespace>
+    <AssemblyName>AsyncSocket.Core</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -42,6 +42,7 @@
     <Compile Include="IoCompletionPort\AsyncSocket.cs" />
     <Compile Include="IoCompletionPort\SaeaSharedBuffer.cs" />
     <Compile Include="Messaging\Patterns\Replier.cs" />
+    <Compile Include="Net\Address.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Messaging\Patterns\Requester.cs" />
     <Compile Include="IoCompletionPort\AsyncEvent.cs" />
