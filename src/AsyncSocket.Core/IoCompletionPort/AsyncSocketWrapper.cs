@@ -1,13 +1,5 @@
-// ----------------------------------------------------------------------------
-// "THE BEER-WARE LICENSE" (Revision 42):
-// <phk@FreeBSD.ORG> wrote this file.  As long as you retain this notice you
-// can do whatever you want with this stuff. If we meet some day, and you think
-// this stuff is worth it, you can buy me a beer in return.   Poul-Henning Kamp
-// ----------------------------------------------------------------------------
-
 using System;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -16,23 +8,6 @@ using AsyncSocket.Core.Patterns;
 
 namespace AsyncSocket.Core.IoCompletionPort
 {
-    /// <summary>
-    /// Interface used to mask methods of AsyncSocket
-    /// </summary>
-    public interface IAsyncSocket
-    {
-        /// <summary>
-        /// Sends a bunch of bytes.
-        /// </summary>
-        /// <param name="bytes">Array of bytes to send.</param>
-        void Send(byte[] bytes);
-
-        /// <summary>
-        /// Receive data.
-        /// </summary>
-        void Receive();
-    }
-
     /// <summary>
     /// This class is a wrapper for .NET Socket + SocketAsyncEventArgs.
     /// </summary>
@@ -57,19 +32,18 @@ namespace AsyncSocket.Core.IoCompletionPort
         /// </summary>
         private SocketAsyncEventArgs _acceptSocketAsyncEventArgs;
 
-        private SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
 
         /// <summary>
         /// Pool of SocketAsyncEventArgs to use for socket async operations.
         /// </summary>
-        private Pool<SocketAsyncEventArgs> _socketAsyncEventArgsPool;
+        private readonly Pool<SocketAsyncEventArgs> _socketAsyncEventArgsPool;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AsyncSocketWrapper"/> class.
         /// </summary>
         /// <param name="socket">.NET Socket to use.</param>
-        /// <param name="acceptEventArgsPool">Pool of SAEA for accept operations.</param>
-        /// <param name="socketAsyncEventArgsPool">Pool of SAEA for I/O operations.</param>
+        /// <param name="socketAsyncEventArgsPool">Pool of SAEA for operations.</param>
         /// <param name="events">A message queue to publish to.</param>
         private AsyncSocketWrapper(
             Socket socket,
@@ -349,15 +323,28 @@ namespace AsyncSocket.Core.IoCompletionPort
         {
             UserToken userToken = eventArgs.UserToken as UserToken;
 
-            AsyncEvent receivedEvent = new AsyncEvent(AsyncOperation.DataReceived, this, eventArgs.BytesTransferred);
+            if (userToken != null)
+            {
+                if (Protocol.TryReadMessage(
+                    eventArgs.Buffer,
+                    eventArgs.Offset,
+                    eventArgs.BytesTransferred,
+                    ref userToken.IncomingMessage))
+                {
+                    AsyncEvent receivedEvent = new AsyncEvent(AsyncOperation.DataReceived, this, eventArgs.BytesTransferred);
 
-            Buffer.BlockCopy(eventArgs.Buffer, eventArgs.Offset, receivedEvent.Buffer, 0, eventArgs.BytesTransferred);
+                    Buffer.BlockCopy(
+                        userToken.IncomingMessage.Body.FrameBytes, 0,
+                        receivedEvent.Buffer, 0,
+                        userToken.IncomingMessage.Body.BytesReceived);
 
-            CleanUp(eventArgs);
+                    CleanUp(eventArgs);
 
-            _socketAsyncEventArgsPool.Push(eventArgs);
-            
-            _events.TryAdd(receivedEvent);
+                    _socketAsyncEventArgsPool.Push(eventArgs);
+
+                    _events.TryAdd(receivedEvent);
+                }
+            }
         }
     }
 }

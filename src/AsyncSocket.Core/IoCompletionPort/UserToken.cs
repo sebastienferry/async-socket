@@ -5,10 +5,12 @@
 // this stuff is worth it, you can buy me a beer in return.   Poul-Henning Kamp
 // ----------------------------------------------------------------------------
 
+using System;
+using System.Linq;
+using System.Security.Cryptography;
+
 namespace AsyncSocket.Core.IoCompletionPort
 {
-    using System.Net.Sockets;
-
     /// <summary>
     /// UserToken objects are used to hold application level data
     /// associated to SocketAsyncEventArgs objects. In our case,
@@ -40,5 +42,99 @@ namespace AsyncSocket.Core.IoCompletionPort
         /// Gets or sets the AsyncSocket wrapper associated to the .NET Socket that initiated the SocketAsyncEventArgs.
         /// </summary>
         public AsyncSocketWrapper Socket { get; private set; }
+
+        public IncomingMessage IncomingMessage;
+    }
+
+    internal class Frame
+    {
+        public byte[] FrameBytes;
+
+        public int BytesToReceive { get; set; }
+
+        public int BytesReceived { get; set; }
+
+        public void Fill(byte[] buffer, int offset, int availableBytes)
+        {
+            Buffer.BlockCopy(
+                buffer,
+                offset,
+                FrameBytes,
+                BytesReceived,
+                Math.Max(availableBytes, BytesToReceive));
+
+            BytesReceived += availableBytes;
+            BytesToReceive -= availableBytes;
+        }
+
+    }
+
+    internal class Protocol
+    {
+        private const int MESSAGE_PREFIX_SIZE_IN_BYTES = sizeof(int);
+
+        public const int MESSAGE_MAX_SIZE_IN_BYTES = 4096;
+
+        public static IncomingMessage Create()
+        {
+            return  new IncomingMessage();
+        }
+
+        public static bool TryReadMessage(
+            byte[] buffer,
+            int offset,
+            int availableBytes,
+            ref IncomingMessage incomingMessage)
+        {
+            if (TryReadHeader(buffer, offset, availableBytes, ref incomingMessage))
+            {
+                return TryReadBody(buffer, offset, availableBytes, ref incomingMessage);
+            }
+
+            return false;
+        }
+        
+        public static bool TryReadHeader(byte[] buffer, int offset, int availableBytes, ref IncomingMessage incomingMessage)
+        {
+            if (incomingMessage.Header.BytesReceived < MESSAGE_PREFIX_SIZE_IN_BYTES)
+            {
+                // Try to read header first
+                incomingMessage.Header.Fill(buffer, offset, availableBytes);
+            }
+
+            if (incomingMessage.Header.BytesReceived < MESSAGE_PREFIX_SIZE_IN_BYTES)
+            {
+                return false;
+            }
+
+            incomingMessage.Body.BytesToReceive = BitConverter.ToInt32(incomingMessage.Header.FrameBytes, 0);
+            
+            incomingMessage.Body.BytesReceived = 0;
+
+            return true;
+        }
+
+        public static bool TryReadBody(byte[] buffer, int offset, int availableBytes, ref IncomingMessage incomingMessage)
+        {
+            if (incomingMessage.Body.BytesReceived < incomingMessage.Body.BytesToReceive)
+            {
+                // Try to read header first
+                incomingMessage.Body.Fill(buffer, offset, availableBytes);
+            }
+
+            if (incomingMessage.Body.BytesToReceive > 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+    
+    internal class IncomingMessage
+    {
+        public Frame Header;
+
+        public Frame Body;
     }
 }

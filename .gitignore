@@ -1,0 +1,6 @@
+src/AsyncSocket.ConsoleClient/bin/
+src/AsyncSocket.ConsoleClient/obj/
+src/AsyncSocket.ConsoleHost/bin/
+src/AsyncSocket.ConsoleHost/obj/
+src/AsyncSocket.Core/bin/
+src/AsyncSocket.Core/obj/

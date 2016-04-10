@@ -39,9 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IoCompletionPort\AsyncSocket.cs" />
+    <Compile Include="IoCompletionPort\IAsyncSocket.cs" />
+    <Compile Include="IoCompletionPort\AsyncSocketWrapper.cs" />
     <Compile Include="IoCompletionPort\SaeaSharedBuffer.cs" />
     <Compile Include="Messaging\Patterns\Replier.cs" />
+    <Compile Include="Messaging\Peer.cs" />
     <Compile Include="Net\Address.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Messaging\Patterns\Requester.cs" />

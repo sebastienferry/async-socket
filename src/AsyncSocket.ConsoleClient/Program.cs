@@ -31,7 +31,7 @@ namespace AsyncSocket.ConsoleClient
         /// </summary>
         public static void Main()
         {
-            IPAddress ipaddress = IPAddress.Parse("127.0.0.1");
+            IPAddress ipaddress = IPAddress.Parse("192.168.225.134");
             
             Requester requester = new Requester(ipaddress, 5555);
 

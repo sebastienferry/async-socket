@@ -5,11 +5,15 @@
 // this stuff is worth it, you can buy me a beer in return.   Poul-Henning Kamp
 // ----------------------------------------------------------------------------
 
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace AsyncSocket.ConsoleHost
 {
     using System;
     using System.Diagnostics;
     using AsyncSocket.Core.Messaging.Patterns;
+    using AsyncSocket.Core.Messaging;
 
     /// <summary>
     /// Server console.
@@ -23,10 +27,18 @@ namespace AsyncSocket.ConsoleHost
         {
             Trace.Listeners.Add(new ConsoleTraceListener());
 
-            Replier replier = new Replier();
+            Peer peer = new Peer();
 
-            replier.Start("tcp://127.0.0.1:5555");
-            
+            peer.Map("ping", ( async context =>
+            {
+                Console.WriteLine("new ping message");
+                await Task.Yield();
+            }));
+
+            CancellationToken ct = new CancellationToken();
+
+            peer.Start(ct).Wait();
+
             Console.ReadLine();
         }
     }
